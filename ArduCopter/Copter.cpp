@@ -73,7 +73,7 @@
  *  Wiki: https://copter.ardupilot.org/
  *
  */
-
+#include <iostream>
 #include "Copter.h"
 
 #define FORCE_VERSION_H_INCLUDE

@@ -15,7 +15,7 @@
 /*
   suppport for serial connected AHRS systems
  */
-
+#include <iostream>
 #include "AP_ExternalAHRS.h"
 #include "AP_ExternalAHRS_VectorNav.h"
 #include "AP_ExternalAHRS_LORD.h"
@@ -184,6 +184,8 @@ void AP_ExternalAHRS::get_filter_status(nav_filter_status &status) const
 Vector3f AP_ExternalAHRS::get_gyro(void)
 {
     WITH_SEMAPHORE(state.sem);
+    std::cout << " EXTERNAL_DATA " << AP_HAL::millis() ;
+    std::cout << state.gyro.z;
     return state.gyro;
 }
 

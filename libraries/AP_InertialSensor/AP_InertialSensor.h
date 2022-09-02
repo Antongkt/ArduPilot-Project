@@ -126,7 +126,12 @@ public:
     ///
     /// @returns	vector of rotational rates in radians/sec
     ///
-    const Vector3f     &get_gyro(uint8_t i) const { return _gyro[i]; }
+    const Vector3f     &get_gyro(uint8_t i) const { 
+                return _gyro[i];
+
+    } 
+
+   
     const Vector3f     &get_gyro(void) const { return get_gyro(_primary_gyro); }
 
     // set gyro offsets in radians/sec
@@ -518,6 +523,9 @@ private:
     // the current center frequency for the notch
     float _calculated_harmonic_notch_freq_hz[INS_MAX_NOTCHES];
     uint8_t _num_calculated_harmonic_notch_frequencies;
+
+    //test
+    Vector3f _fake_gyro[3];
 
     // Most recent gyro reading
     Vector3f _gyro[INS_MAX_INSTANCES];

@@ -18,6 +18,7 @@
  *  ArduPilot
  *
  */
+#include <iostream>
 #include <AP_HAL/AP_HAL.h>
 #include "AP_AHRS.h"
 #include "AP_AHRS_View.h"
@@ -244,6 +245,8 @@ void AP_AHRS::update_trim_rotation_matrices()
 // return the smoothed gyro vector corrected for drift
 const Vector3f &AP_AHRS::get_gyro(void) const
 {
+    std::cout << " EXTERNAL_DATA " << AP_HAL::millis() ;
+    std::cout << _gyro_estimate.z;
     return _gyro_estimate;
 }
 
@@ -404,6 +407,8 @@ void AP_AHRS::copy_estimates_from_backend_estimates(const AP_AHRS_Backend::Estim
     _dcm_matrix = results.dcm_matrix;
 
     _gyro_estimate = results.gyro_estimate;
+    
+                
     _gyro_drift = results.gyro_drift;
 
     // copy earth-frame accelerometer estimates:
@@ -489,6 +494,7 @@ void AP_AHRS::update_EKF2(void)
             if (primary_imu == -1 || !_ins.get_gyro_health(primary_imu)) {
                 // the primary IMU is undefined so use an uncorrected default value from the INS library
                 _gyro_estimate = _ins.get_gyro();
+                std::cout << " YYYYYYY ";
             } else {
                 // use the same IMU as the primary EKF and correct for gyro drift
                 _gyro_estimate = _ins.get_gyro(primary_imu) + _gyro_drift;
@@ -569,6 +575,9 @@ void AP_AHRS::update_EKF3(void)
             } else {
                 // use the same IMU as the primary EKF and correct for gyro drift
                 _gyro_estimate = _ins.get_gyro(primary_imu) + _gyro_drift;
+                
+                
+
             }
 
             // get 3-axis accel bias festimates for active EKF (this is usually for the primary IMU)
@@ -610,7 +619,7 @@ void AP_AHRS::update_SITL(void)
     const AP_InertialSensor &_ins = AP::ins();
 
     if (active_EKF_type() == EKFType::SIM) {
-
+        std::cout << " AAAAAA ";
         fdm.quaternion.rotation_matrix(_dcm_matrix);
         _dcm_matrix = _dcm_matrix * get_rotation_vehicle_body_to_autopilot_body();
         _dcm_matrix.to_euler(&roll, &pitch, &yaw);
@@ -621,7 +630,11 @@ void AP_AHRS::update_SITL(void)
         _gyro_drift.zero();
 
         _gyro_estimate = _ins.get_gyro();
-
+        std::cout << " GYRO DATA " ;
+        float x = _gyro_estimate.x;
+        float y = _gyro_estimate.y;
+        float z = _gyro_estimate.z;
+        std::cout << " XVALUE = " << x << " YVALUE = " << y << " ZVALUE = " << z;
         for (uint8_t i=0; i<INS_MAX_INSTANCES; i++) {
             const Vector3f &accel = _ins.get_accel(i);
             _accel_ef_ekf[i] = _dcm_matrix * get_rotation_autopilot_body_to_vehicle_body() * accel;
@@ -676,6 +689,7 @@ void AP_AHRS::update_external(void)
         _gyro_drift.zero();
 
         _gyro_estimate = AP::externalAHRS().get_gyro();
+        std::cout << " XXXXXXXX ";
 
         for (uint8_t i=0; i<INS_MAX_INSTANCES; i++) {
             Vector3f accel = AP::externalAHRS().get_accel();

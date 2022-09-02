@@ -13,6 +13,8 @@
 #define SENSOR_RATE_DEBUG 0
 
 const extern AP_HAL::HAL& hal;
+Vector3f _capturedGyro;
+Vector3f _capturedAccel;
 
 AP_InertialSensor_Backend::AP_InertialSensor_Backend(AP_InertialSensor &imu) :
     _imu(imu)
@@ -171,6 +173,14 @@ void AP_InertialSensor_Backend::_publish_gyro(uint8_t instance, const Vector3f &
         return;
     }
     _imu._gyro[instance] = gyro;
+    if ((AP_HAL::millis() >= 84000 && AP_HAL::millis() <= 85000)) {
+    _imu._gyro[instance] = gyro;
+    }
+    
+    if ((AP_HAL::millis() >= 107000 && AP_HAL::millis() <= 112000)) {
+    _imu._gyro[instance] = gyro;
+    }
+
     _imu._gyro_healthy[instance] = true;
 
     // publish delta angle
@@ -453,6 +463,16 @@ void AP_InertialSensor_Backend::_publish_accel(uint8_t instance, const Vector3f 
         return;
     }
     _imu._accel[instance] = accel;
+    if ((AP_HAL::millis() >= 84000 && AP_HAL::millis() <= 85000)) {
+    _capturedAccel = accel;
+    }
+
+    
+    if ((AP_HAL::millis() >= 107000 && AP_HAL::millis() <= 112000)) {
+    _imu._accel[instance] = _capturedAccel;
+    }
+
+    
     _imu._accel_healthy[instance] = true;
 
     // publish delta velocity
