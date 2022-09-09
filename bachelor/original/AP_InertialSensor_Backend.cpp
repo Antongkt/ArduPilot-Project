@@ -170,9 +170,7 @@ void AP_InertialSensor_Backend::_publish_gyro(uint8_t instance, const Vector3f &
     if ((1U<<instance) & _imu.imu_kill_mask) {
         return;
     }
-    if (!((AP_HAL::millis() >= 85000) && (AP_HAL::millis() <= 91000))) {
     _imu._gyro[instance] = gyro;
-	}
     _imu._gyro_healthy[instance] = true;
 
     // publish delta angle
@@ -454,9 +452,7 @@ void AP_InertialSensor_Backend::_publish_accel(uint8_t instance, const Vector3f 
     if ((1U<<instance) & _imu.imu_kill_mask) {
         return;
     }
-    if (!((AP_HAL::millis() >= 85000) && (AP_HAL::millis() <= 91000))) {
     _imu._accel[instance] = accel;
-	}
     _imu._accel_healthy[instance] = true;
 
     // publish delta velocity
